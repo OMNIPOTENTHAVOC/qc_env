@@ -1,0 +1,18 @@
+# QKD System — Python dependencies
+# Tested with Python 3.10+
+
+# Quantum simulation
+qiskit==0.45.3
+qiskit-aer==0.13.3
+
+# API layer
+flask==3.0.3
+requests==2.32.3
+
+# Security layer
+cryptography==42.0.8
+
+# Observability / UI
+streamlit==1.35.0
+plotly==5.22.0
+pandas==2.2.2
