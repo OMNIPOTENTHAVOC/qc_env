@@ -64,12 +64,15 @@ if run_session:
                 timeout=30,
             )
             result = resp.json()
-            st.session_state["last_result"] = result
-            if result.get("valid"):
-                st.success("✅ Key exchange successful — data encrypted and stored.")
+            if "error" not in result:
+                st.session_state["last_result"] = result
+                if result.get("valid"):
+                    st.success("✅ Key exchange successful — data encrypted and stored.")
+                else:
+                    reason = "QBER too high (Eve detected)" if result.get("eve_detected") else "Too few sifted bits"
+                    st.error(f"❌ Key rejected — {reason}")
             else:
-                reason = "QBER too high (Eve detected)" if result.get("eve_detected") else "Too few sifted bits"
-                st.error(f"❌ Key rejected — {reason}")
+              st.error(f"Node A error: {result['error']}")
         except requests.RequestException as exc:
             st.error(f"Could not reach Node A: {exc}")
 

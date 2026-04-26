@@ -1,8 +1,7 @@
-from qiskit import Aer, execute, QuantumCircuit
+from qiskit import  QuantumCircuit,ClassicalRegister
+from qiskit_aer import AerSimulator
 
-
-# Use QASM simulator for probabilistic measurement
-backend = Aer.get_backend('qasm_simulator')
+backend = AerSimulator()
 
 
 def apply_measurement_basis(qc: QuantumCircuit, bases: list[int]) -> QuantumCircuit:
@@ -26,12 +25,15 @@ def measure(qc: QuantumCircuit) -> list[int]:
     Perform measurement on all qubits and return results as list of bits.
     """
     n = qc.num_qubits
+    if qc.num_clbits == 0:
+        cr = ClassicalRegister(n)
+        qc.add_register(cr)
 
     # Add measurement operations
     qc.measure(range(n), range(n))
 
     # Execute circuit
-    job = execute(qc, backend, shots=1)
+    job = backend.run(qc,shots=1)
     result = job.result()
     counts = result.get_counts()
 
